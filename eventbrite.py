@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# -*- encoding: utf-8 -*-
 import argparse
 import csv
 import math
@@ -13,8 +13,8 @@ class BadgePrinter:
 	def __init__(self):
 
 		# sizes in mm
-		self.badge_width = 82
-		self.badge_height= 112
+		self.badge_width = 85
+		self.badge_height= 54
 		self.badge_padding = 2
 
 		self.paper_width = 210 # A4 paper
@@ -83,8 +83,8 @@ class BadgePrinter:
 		self.tex_document += textwrap.dedent(r'''			\AddToShipoutPictureBG*{
 				%%\put(%smm,%smm){\framebox(%smm,%smm){}}
 				\put(%smm,%smm){\framebox(%smm,%smm){}}
-				\put(%smm,%smm){\includegraphics[width=80mm,height=110mm]{background.png}}
-				\put(%smm,%smm){\makebox(%smm,%smm){\parbox{80mm}{\centering{\fontsize{30}{30}\selectfont\textbf{%s}\\\vspace{2mm}\fontsize{12}{12}\selectfont\textit{%s}}}}}
+				\put(%smm,%smm){\includegraphics[width=81mm,height=50mm]{background.png}}
+				\put(%smm,%smm){\makebox(%smm,%smm){\parbox{80mm}{\centering{\fontsize{20}{20}\selectfont\textbf{%s}\\\vspace{2mm}\fontsize{12}{12}\selectfont\textit{%s}}}}}
 			}
 		''' % (
 			left_margin, -(self.page_topmargin + y*self.badge_height), self.badge_width, self.badge_height,
@@ -129,7 +129,7 @@ class BadgePrinter:
 			self.flush_backside()
 
 def main(args):
-	with open(args.csv_file) as f:
+	with open(args.csv_file, encoding='utf-8') as f:
 
 		b = BadgePrinter()
 		b.tex_header()
@@ -142,7 +142,7 @@ def main(args):
 			company = row['Company']
 			ticketType = row['Ticket Type']
 			jobTitle = row['Job Title']
-			print(fullName, company, ticketType, jobTitle)
+			#print(fullName, company, ticketType, jobTitle)
 			b.next_badge(fullName, jobTitle)
 
 	b.flush_badges()
@@ -151,7 +151,7 @@ def main(args):
 	p = subprocess.Popen(['pdflatex', '-jobname=badges'], stdin=subprocess.PIPE,
 			encoding='utf8')
 
-	with open('debug.tex', 'w') as f:
+	with open('debug.tex', 'w', encoding="utf-8") as f:
 		f.write(b.tex_document)
 
 	p.communicate(input=b.tex_document)
