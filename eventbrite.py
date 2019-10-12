@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import argparse
 import csv
@@ -6,14 +6,15 @@ import math
 import os
 import subprocess
 import textwrap
+import sys
 
 class BadgePrinter:
 
 	def __init__(self):
-		
+
 		# sizes in mm
-		self.badge_width = 85
-		self.badge_height= 54
+		self.badge_width = 82
+		self.badge_height= 112
 		self.badge_padding = 2
 
 		self.paper_width = 210 # A4 paper
@@ -49,7 +50,7 @@ class BadgePrinter:
 
 			\begin{document}
 		''')
-		
+
 		self._tex_footer = textwrap.dedent(r'''	      \end{document}''')
 
 		self._tex_newpage = textwrap.dedent(r'''			\vspace*{\fill}
@@ -64,7 +65,7 @@ class BadgePrinter:
 
 	def tex_newpage(self):
 		self.tex_document += self._tex_newpage
-	
+
 	def add_badge(self, position, name, affiliation, flipside=False):
 		# left or right badge, x=0 -> left, x=1 -> right
 		x = position % 2
@@ -75,23 +76,23 @@ class BadgePrinter:
 		badge_inner_height = self.badge_height - 2*self.badge_padding
 
 		left_margin = self.page_leftmargin + x*self.badge_width
-		
+
 		if flipside:
 			left_margin = self.paper_width - self.page_leftmargin - 2*self.badge_width + x*self.badge_width + self.printer_leftmargin_offset_flipside
 
 		self.tex_document += textwrap.dedent(r'''			\AddToShipoutPictureBG*{
 				%%\put(%smm,%smm){\framebox(%smm,%smm){}}
 				\put(%smm,%smm){\framebox(%smm,%smm){}}
-				\put(%smm,%smm){\includegraphics[width=81mm,height=50mm]{header.jpg}}
+				\put(%smm,%smm){\includegraphics[width=80mm,height=110mm]{background.png}}
 				\put(%smm,%smm){\makebox(%smm,%smm){\parbox{80mm}{\centering{\fontsize{30}{30}\selectfont\textbf{%s}\\\vspace{2mm}\fontsize{12}{12}\selectfont\textit{%s}}}}}
 			}
-		''' % ( 
+		''' % (
 			left_margin, -(self.page_topmargin + y*self.badge_height), self.badge_width, self.badge_height,
 			left_margin + self.badge_padding, -(self.page_topmargin + y*self.badge_height - self.badge_padding), badge_inner_width, badge_inner_height,
 			left_margin + self.badge_padding, -(self.page_topmargin + (y-1)*self.badge_height + self.badge_padding+50),
 			left_margin + self.badge_padding, -(self.page_topmargin + y*self.badge_height - self.badge_padding), badge_inner_width, badge_inner_height - self.header_height, name, affiliation)
 		)
-		
+
 	def next_badge(self, name, affiliation):
 		affiliation = affiliation.replace('&', '\\&')
 		self.add_badge(self.badge_counter % 10, name, affiliation)
@@ -99,7 +100,7 @@ class BadgePrinter:
 		self.backside.append((name, affiliation))
 
 		self.badge_counter += 1
-		
+
 		if self.badge_counter % 10 == 0:
 			self.tex_newpage()
 			self.flush_backside()
@@ -117,7 +118,7 @@ class BadgePrinter:
 		for i, r in enumerate(self.backside):
 			if r is not None:
 				self.add_badge(i, r[0], r[1], flipside=True)
-		
+
 		self.backside = []
 		self.tex_newpage()
 
@@ -128,17 +129,24 @@ class BadgePrinter:
 
 def main(args):
 	with open(args.csv_file) as f:
-		
+
 		b = BadgePrinter()
 		b.tex_header()
 		reader = csv.DictReader(f)
 		for row in reader:
-			if (args.limit and row['Booking Reference'] in args.limit) or not args.limit:
-				b.next_badge(row['Delegate Name'], row['1092~Affiliation:'])
+			#if (args.limit and row['Order #'] in args.limit) or not args.limit:
+			#	b.next_badge(row['First Name'], row['Last Name'])
+
+			fullName = row['First Name'] + " " + row['Last Name']
+			company = row['Company']
+			ticketType = row['Ticket Type']
+			jobTitle = row['Job Title']
+			print fullName, company, ticketType, jobTitle
+			b.next_badge(fullName, jobTitle)
 
 	b.flush_badges()
 	b.tex_footer()
-	
+
 	p = subprocess.Popen(['pdflatex', '-jobname=badges'], stdin=subprocess.PIPE)
 
 	with open('debug.tex', 'w') as f:
