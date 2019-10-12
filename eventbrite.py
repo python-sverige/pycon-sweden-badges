@@ -106,7 +106,8 @@ class BadgePrinter:
 			self.flush_backside()
 
 	def flush_backside(self):
-		for i in range(len(self.backside)/2):
+		backsideSize = int(len(self.backside)/2)
+		for i in range(backsideSize):
 			tmp = self.backside[2*i]
 			self.backside[2*i] = self.backside[2*i+1]
 			self.backside[2*i+1] = tmp
@@ -141,18 +142,19 @@ def main(args):
 			company = row['Company']
 			ticketType = row['Ticket Type']
 			jobTitle = row['Job Title']
-			print fullName, company, ticketType, jobTitle
+			print(fullName, company, ticketType, jobTitle)
 			b.next_badge(fullName, jobTitle)
 
 	b.flush_badges()
 	b.tex_footer()
 
-	p = subprocess.Popen(['pdflatex', '-jobname=badges'], stdin=subprocess.PIPE)
+	p = subprocess.Popen(['pdflatex', '-jobname=badges'], stdin=subprocess.PIPE,
+			encoding='utf8')
 
 	with open('debug.tex', 'w') as f:
 		f.write(b.tex_document)
 
-	p.communicate(b.tex_document)
+	p.communicate(input=b.tex_document)
 
 	os.remove('badges.aux')
 	os.remove('badges.log')
@@ -160,7 +162,6 @@ def main(args):
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Create badges for IMC2017.')
 	parser.add_argument('csv_file', help='CSV file with input data')
-	parser.add_argument('--limit', help='Limit badge generation to specific IDs', nargs='+')
 
 	args = parser.parse_args()
 
