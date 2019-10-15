@@ -120,6 +120,8 @@ class BadgePrinter:
 			self.flush_backside(background)
 
 	def flush_backside(self, background):
+		return
+		# skip everything
 		backsideSize = int(len(self.backside)/2)
 		for i in range(backsideSize):
 			tmp = self.backside[2*i]
