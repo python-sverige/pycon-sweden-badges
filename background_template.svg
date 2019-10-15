@@ -922,12 +922,12 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="399.20289"
+     inkscape:cx="389.60645"
      inkscape:cy="734.57429"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     showguides="true"
+     showguides="false"
      inkscape:guide-bbox="true"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
@@ -988,138 +988,134 @@
        inkscape:export-xdpi="113"
        inkscape:export-ydpi="113" />
     <g
-       id="g5280"
-       transform="matrix(0.76924572,0,0,0.7656852,6.2642436,60.298195)"
+       inkscape:export-ydpi="113"
        inkscape:export-xdpi="113"
-       inkscape:export-ydpi="113">
+       transform="matrix(0.04948242,0,0,0.04925338,25.283502,61.767066)"
+       id="g3628"
+       style="stroke:none;stroke-opacity:1">
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 159.013,96.193 v 24.097 0 z"
+         id="path3574" />
+      <path
+         style="fill:none;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
+         id="path3576" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 159.013,228.963 v 60.242 0 z"
+         id="path3578" />
+      <path
+         style="fill:none;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
+         id="path3580" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 129.247,257.076 h 21.735 v 0 h -22.443 c 0.235,0 0.471,0 0.708,0 z"
+         id="path3582" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 159.013,96.193 v 24.097 0 z"
+         id="path3586" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="M 221.146,120.527"
+         id="path3588" />
+      <path
+         style="fill:none;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
+         id="path3590" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 159.013,228.963 v 60.242 0 z"
+         id="path3592" />
+      <path
+         style="fill:#fdc93a;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 221.618,60.757 c -11.576,0 -21.735,0.945 -31.184,2.599 -26.696,4.725 -31.657,14.647 -31.657,32.838 v 24.333 h 62.841 c 0,0 0,-57.408 0,-59.77 z m -35.2,43.469 c -6.615,0 -11.812,-5.434 -11.812,-12.048 0,-6.614 5.434,-12.048 11.812,-12.048 6.615,0 11.812,5.434 11.812,12.048 0,6.85 -5.434,12.048 -11.812,12.048 z"
+         id="path3594" />
+      <path
+         style="fill:none;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
+         id="path3596" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 221.382,265.108 v 61.66 c 9.922,0 21.026,-1.89 32.602,-5.197 16.065,-4.725 31.657,-13.939 31.657,-32.129 v -24.097 h -63.314 m 35.437,15.828 c 6.615,0 11.812,5.434 11.812,12.048 0,6.615 -5.434,12.048 -11.812,12.048 -6.615,0 -11.812,-5.434 -11.812,-12.048 0,-6.614 5.433,-12.048 11.812,-12.048 z"
+         id="path3598" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 348.009,161.161 c -4.489,-18.427 -13.23,-32.129 -31.657,-32.129 h -23.861 v 28.113 c 0,12.993 -6.615,24.806 -16.537,32.129 h 76.543 c -0.472,-8.741 -1.889,-17.955 -4.488,-28.113 z"
+         id="path3600" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 158.069,128.559 v 0 h -23.861 c -18.427,0 -34.492,11.104 -39.689,32.129 -2.599,10.631 -4.016,19.372 -4.489,28.113 h 67.802 v -60.242 z"
+         id="path3602" />
       <g
-         style="stroke:none;stroke-opacity:1"
-         id="g3628"
-         transform="matrix(0.06432589,0,0,0.06432589,24.724555,1.9183741)"
-         inkscape:export-xdpi="113"
-         inkscape:export-ydpi="113">
+         id="g3604"
+         style="stroke:none;stroke-opacity:1">
         <path
-           id="path3574"
-           d="m 159.013,96.193 v 24.097 0 z"
+           style="fill:#fdc93a;stroke:none;stroke-opacity:1"
            inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
+           d="m 189.725,188.801 h 31.657 v -60.242 h -63.314 v 60.242 H 90.266 c -0.472,11.104 0.945,21.971 4.489,36.145 4.489,18.427 14.883,31.657 32.838,32.129 h 22.443 v -28.822 c 0,-8.505 3.071,-16.537 7.796,-22.916 7.324,-9.921 18.9,-16.536 31.893,-16.536 z"
+           id="path3606" />
         <path
-           id="path3576"
-           d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
+           style="fill:#fdc93a;stroke:none;stroke-opacity:1"
            inkscape:connector-curvature="0"
-           style="fill:none;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3578"
-           d="m 159.013,228.963 v 60.242 0 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3580"
-           d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
-           inkscape:connector-curvature="0"
-           style="fill:none;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3582"
-           d="m 129.247,257.076 h 21.735 v 0 h -22.443 c 0.235,0 0.471,0 0.708,0 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3586"
-           d="m 159.013,96.193 v 24.097 0 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3588"
-           d="M 221.146,120.527"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3590"
-           d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
-           inkscape:connector-curvature="0"
-           style="fill:none;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3592"
-           d="m 159.013,228.963 v 60.242 0 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3594"
-           d="m 221.618,60.757 c -11.576,0 -21.735,0.945 -31.184,2.599 -26.696,4.725 -31.657,14.647 -31.657,32.838 v 24.333 h 62.841 c 0,0 0,-57.408 0,-59.77 z m -35.2,43.469 c -6.615,0 -11.812,-5.434 -11.812,-12.048 0,-6.614 5.434,-12.048 11.812,-12.048 6.615,0 11.812,5.434 11.812,12.048 0,6.85 -5.434,12.048 -11.812,12.048 z"
-           inkscape:connector-curvature="0"
-           style="fill:#fdc93a;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3596"
-           d="m 257.764,305.27 c 6.615,0 11.812,-5.434 11.812,-12.048 0,-6.615 -5.434,-12.048 -11.812,-12.048 -6.615,0 -11.812,5.434 -11.812,12.048 0,6.614 5.433,12.048 11.812,12.048 z"
-           inkscape:connector-curvature="0"
-           style="fill:none;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3598"
-           d="m 221.382,265.108 v 61.66 c 9.922,0 21.026,-1.89 32.602,-5.197 16.065,-4.725 31.657,-13.939 31.657,-32.129 v -24.097 h -63.314 m 35.437,15.828 c 6.615,0 11.812,5.434 11.812,12.048 0,6.615 -5.434,12.048 -11.812,12.048 -6.615,0 -11.812,-5.434 -11.812,-12.048 0,-6.614 5.433,-12.048 11.812,-12.048 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3600"
-           d="m 348.009,161.161 c -4.489,-18.427 -13.23,-32.129 -31.657,-32.129 h -23.861 v 28.113 c 0,12.993 -6.615,24.806 -16.537,32.129 h 76.543 c -0.472,-8.741 -1.889,-17.955 -4.488,-28.113 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3602"
-           d="m 158.069,128.559 v 0 h -23.861 c -18.427,0 -34.492,11.104 -39.689,32.129 -2.599,10.631 -4.016,19.372 -4.489,28.113 h 67.802 v -60.242 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <g
-           style="stroke:none;stroke-opacity:1"
-           id="g3604">
-          <path
-             id="path3606"
-             d="m 189.725,188.801 h 31.657 v -60.242 h -63.314 v 60.242 H 90.266 c -0.472,11.104 0.945,21.971 4.489,36.145 4.489,18.427 14.883,31.657 32.838,32.129 h 22.443 v -28.822 c 0,-8.505 3.071,-16.537 7.796,-22.916 7.324,-9.921 18.9,-16.536 31.893,-16.536 z"
-             inkscape:connector-curvature="0"
-             style="fill:#fdc93a;stroke:none;stroke-opacity:1" />
-          <path
-             id="path3608"
-             d="m 352.498,189.274 h -76.543 c -6.615,4.961 -14.647,8.032 -23.152,8.032 h -31.657 -6.379 -25.042 c -17.246,0 -31.657,14.883 -31.657,32.129 v 60.479 c 0,17.246 14.883,27.168 31.657,32.129 10.395,3.071 20.79,4.725 31.657,4.725 v -69.22 h 95.679 c 17.718,-0.473 24.569,-13.23 30.948,-32.129 3.78,-11.812 5.434,-23.388 4.489,-36.145 z"
-             inkscape:connector-curvature="0"
-             style="fill:#fdc93a;stroke:none;stroke-opacity:1" />
-        </g>
-        <path
-           id="path3610"
-           d="M 285.641,257.312"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
-        <path
-           id="path3612"
-           d="m 253.984,63.356 c -10.395,-1.654 -22.207,-2.599 -32.602,-2.599 v 128.045 h 32.602 c 17.718,0 31.657,-14.411 31.657,-32.129 V 96.43 c 0,-17.246 -14.648,-30.24 -31.657,-33.074 z"
-           inkscape:connector-curvature="0"
-           style="fill:#34589e;stroke:none;stroke-opacity:1" />
+           d="m 352.498,189.274 h -76.543 c -6.615,4.961 -14.647,8.032 -23.152,8.032 h -31.657 -6.379 -25.042 c -17.246,0 -31.657,14.883 -31.657,32.129 v 60.479 c 0,17.246 14.883,27.168 31.657,32.129 10.395,3.071 20.79,4.725 31.657,4.725 v -69.22 h 95.679 c 17.718,-0.473 24.569,-13.23 30.948,-32.129 3.78,-11.812 5.434,-23.388 4.489,-36.145 z"
+           id="path3608" />
       </g>
-      <text
-         font-size="179.546"
-         letter-spacing="7"
-         id="text3616"
-         x="29.615271"
-         y="28.128006"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.85338831px;line-height:0%;font-family:Avenir;-inkscape-font-specification:'Avenir, Normal';text-align:start;letter-spacing:0.18921934;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.06432589;stroke-opacity:1"
-         inkscape:export-xdpi="113"
-         inkscape:export-ydpi="113">
-        <tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.85338831px;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.06432589;stroke-opacity:1"
-           id="tspan3772">PYCON</tspan>
-      </text>
-      <text
-         font-size="42.5241"
-         letter-spacing="88"
-         id="text3620"
-         x="29.380795"
-         y="30.135208"
-         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:1.14947617px;line-height:0%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold';text-align:start;letter-spacing:2.37867117;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.06432589;stroke-opacity:1"
-         inkscape:export-xdpi="113"
-         inkscape:export-ydpi="113">
-        <tspan
-           style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:1.14947617px;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.06432589;stroke-opacity:1"
-           id="tspan3774">SWEDEN</tspan>
-      </text>
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="M 285.641,257.312"
+         id="path3610" />
+      <path
+         style="fill:#34589e;stroke:none;stroke-opacity:1"
+         inkscape:connector-curvature="0"
+         d="m 253.984,63.356 c -10.395,-1.654 -22.207,-2.599 -32.602,-2.599 v 128.045 h 32.602 c 17.718,0 31.657,-14.411 31.657,-32.129 V 96.43 c 0,-17.246 -14.648,-30.24 -31.657,-33.074 z"
+         id="path3612" />
     </g>
+    <text
+       inkscape:export-ydpi="113"
+       inkscape:export-xdpi="113"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.72479796px;line-height:0%;font-family:Avenir;-inkscape-font-specification:'Avenir, Normal';text-align:start;letter-spacing:0.14521892;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.04936777;stroke-opacity:1;"
+       y="82.025444"
+       x="28.978365"
+       id="text3616"
+       letter-spacing="7"
+       font-size="179.546"
+       transform="scale(1.0023224,0.99768302)">
+      <tspan
+         id="tspan3772"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.72479796px;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.04936777;stroke-opacity:1;">PYCON</tspan>
+    </text>
+    <text
+       inkscape:export-ydpi="113"
+       inkscape:export-xdpi="113"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:0.88218087px;line-height:0%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold';text-align:start;letter-spacing:1.82554305;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.04936777;stroke-opacity:1;"
+       y="83.565895"
+       x="28.798414"
+       id="text3620"
+       letter-spacing="88"
+       font-size="42.5241"
+       transform="scale(1.0023224,0.99768302)">
+      <tspan
+         id="tspan3774"
+         style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:0.88218087px;line-height:125%;font-family:Avenir;-inkscape-font-specification:'Avenir, Ultra-Bold';text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;stroke:none;stroke-width:0.04936777;stroke-opacity:1;">SWEDEN</tspan>
+    </text>
     <rect
        style="fill:#000080;fill-opacity:0.75;stroke:#000000;stroke-width:0.15891945pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="rect5246"
@@ -1129,23 +1125,7 @@
        y="106.04568"
        inkscape:export-xdpi="113"
        inkscape:export-ydpi="113" />
-    <flowRoot
-       xml:space="preserve"
-       id="flowRoot5248"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;line-height:1.25;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.00000003pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="matrix(0.7196254,0,0,0.5072891,-40.126683,-75.723805)"
-       inkscape:export-xdpi="113"
-       inkscape:export-ydpi="113"><flowRegion
-         id="flowRegion5250"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff"><rect
-           id="rect5252"
-           width="251.52798"
-           height="49.497475"
-           x="123.74369"
-           y="359.34943"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff" /></flowRegion><flowPara
-         id="flowPara5254"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff">STUDENT</flowPara></flowRoot>    <circle
+    <circle
        style="fill:#ffffff;fill-opacity:0.75;stroke:none;stroke-width:0.26458331pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        id="path5294"
        cx="65.881935"
@@ -1156,20 +1136,20 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot5248-7"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;line-height:1.25;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.00000003pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;line-height:1.25;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.00000003pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
        transform="matrix(0.71962539,0,0,0.50728909,-43.921188,-112.28573)"
        inkscape:export-xdpi="113"
        inkscape:export-ydpi="113"><flowRegion
          id="flowRegion5250-6"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff"><rect
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;"><rect
            id="rect5252-9"
            width="82.691666"
            height="30.988255"
            x="123.74369"
            y="359.34943"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff" /></flowRegion><flowPara
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:12px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;" /></flowRegion><flowPara
          id="flowPara5254-1"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:11.99980831px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff">PYCON SWEDEN</flowPara><flowPara
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:11.99980831px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:11.99980831px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;">PYCON SWEDEN</flowPara><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;font-size:11.99980831px;font-family:Impact;-inkscape-font-specification:'Impact, Condensed';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:center;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;"
          id="flowPara5320">2019</flowPara></flowRoot>  </g>
 </svg>
