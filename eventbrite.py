@@ -27,9 +27,10 @@ class BadgePrinter:
 
 		# sizes in mm
 
-		self.badge_width = int(BADGESIZE.split("x")[0]) + 4
-		self.badge_height= int(BADGESIZE.split("x")[1]) + 4
+		self.badge_width, self.badge_height = self.getSize(BADGESIZE)
 		self.badge_padding = 2
+		self.badge_width += 2 * self.badge_padding
+		self.badge_height += 2 * self.badge_padding
 
 		self.paper_width = 210 # A4 paper
 
@@ -70,6 +71,11 @@ class BadgePrinter:
 		self._tex_newpage = textwrap.dedent(r'''			\vspace*{\fill}
 			\newpage
 		''')
+
+	def getSize(self, sizeText):
+		x = int(sizeText.split("x")[0])
+		y = int(sizeText.split("x")[1])
+		return (x, y)
 
 	def tex_header(self):
 		self.tex_document += self._tex_header
