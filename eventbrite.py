@@ -10,7 +10,7 @@ import sys
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background.png"
-BLANKS = 30
+BLANKS = 6
 BADGES = {
 	"Business" : "background.png",
 	"Business - Invoiced" : "background.png",
@@ -85,7 +85,10 @@ class BadgePrinter:
 		x = position % 2
 		# badge number from top
 		y = int(math.ceil((position + 1)/2.0))
+		TAB = "\t"
 
+		print("\tx=", x)
+		print("\ty=", y)
 		badge_inner_width = self.badge_width - 2*self.badge_padding
 		badge_inner_height = self.badge_height - 2*self.badge_padding
 
@@ -94,18 +97,43 @@ class BadgePrinter:
 		if flipside:
 			left_margin = self.paper_width - self.page_leftmargin - 2*self.badge_width + x*self.badge_width + self.printer_leftmargin_offset_flipside
 
-		self.tex_document += textwrap.dedent(r'''			\AddToShipoutPictureBG*{
-				%%\put(%smm,%smm){\framebox(%smm,%smm){}}
-				\put(%smm,%smm){\framebox(%smm,%smm){}}
-				\put(%smm,%smm){\includegraphics[width=81mm,height=50mm]{%s}}
-				\put(%smm,%smm){\makebox(%smm,%smm){\parbox{80mm}{\centering{\fontsize{20}{20}\selectfont\textbf{%s}\\\vspace{2mm}\fontsize{12}{12}\selectfont\textit{%s}}}}}
-			}
-		''' % (
-			left_margin, -(self.page_topmargin + y*self.badge_height), self.badge_width, self.badge_height,
-			left_margin + self.badge_padding, -(self.page_topmargin + y*self.badge_height - self.badge_padding), badge_inner_width, badge_inner_height,
-			left_margin + self.badge_padding, -(self.page_topmargin + (y-1)*self.badge_height + self.badge_padding+50), background,
-			left_margin + self.badge_padding, -(self.page_topmargin + y*self.badge_height - self.badge_padding), badge_inner_width, badge_inner_height - self.header_height, name, affiliation)
-		)
+		self.tex_document += textwrap.dedent("""%s\\AddToShipoutPictureBG*{\n""" %
+			(3 * TAB ))
+		self.tex_document += textwrap.dedent("""%s%%\\put(%smm,%smm)""" %
+			(4 * TAB,
+			left_margin,
+			-(self.page_topmargin + y*self.badge_height)))
+		self.tex_document += textwrap.dedent("""{\\framebox(%smm,%smm){}}\n""" %
+			(self.badge_width,
+			self.badge_height))
+		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
+			(4 * TAB,
+			left_margin + self.badge_padding,
+			-(self.page_topmargin + y*self.badge_height - self.badge_padding)))
+		self.tex_document += textwrap.dedent("""{\\framebox(%smm,%smm){}}\n""" %
+			(badge_inner_width,
+			badge_inner_height))
+		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
+			(4 * TAB,
+			left_margin + self.badge_padding,
+			-(self.page_topmargin + (y-1)*self.badge_height + self.badge_padding+50)))
+		self.tex_document += textwrap.dedent("""{\\includegraphics[width=80mm,height=50mm]{%s}}\n""" %
+			(background))
+		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
+			(4 * TAB,
+			left_margin + self.badge_padding,
+			-(self.page_topmargin + y*self.badge_height - self.badge_padding)))
+		self.tex_document += textwrap.dedent("""{\\makebox(%smm,%smm)""" %
+			(badge_inner_width,
+			badge_inner_height - self.header_height))
+		self.tex_document += textwrap.dedent("""{\\parbox{80mm}{\\centering""")
+		self.tex_document += textwrap.dedent("""{\\fontsize{20}{20}\\selectfont""")
+		self.tex_document += textwrap.dedent("""\\textbf{%s}\\\\\\vspace{2mm}""" %
+			(name))
+		self.tex_document += textwrap.dedent("""\\fontsize{12}{12}\\selectfont""")
+		self.tex_document += textwrap.dedent("""\\textit{%s}}}}}\n""" %
+			affiliation)
+		self.tex_document += textwrap.dedent("""%s}\n""" % (3 * TAB))
 
 	def next_badge(self, name, affiliation, background):
 		affiliation = affiliation.replace('&', '\\&')
