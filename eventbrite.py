@@ -80,7 +80,7 @@ class BadgePrinter:
 	def tex_newpage(self):
 		self.tex_document += self._tex_newpage
 
-	def add_badge(self, position, name, affiliation, background, flipside=False):
+	def add_badge(self, position, name, affiliation, background):
 		# left or right badge, x=0 -> left, x=1 -> right
 		x = position % 2
 		# badge number from top
@@ -93,9 +93,6 @@ class BadgePrinter:
 		badge_inner_height = self.badge_height - 2*self.badge_padding
 
 		left_margin = self.page_leftmargin + x*self.badge_width
-
-		if flipside:
-			left_margin = self.paper_width - self.page_leftmargin - 2*self.badge_width + x*self.badge_width + self.printer_leftmargin_offset_flipside
 
 		self.tex_document += textwrap.dedent("""%s\\AddToShipoutPictureBG*{\n""" %
 			(3 * TAB ))
