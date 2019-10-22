@@ -8,6 +8,9 @@ import subprocess
 import textwrap
 import sys
 import html
+import sys
+import re
+import shutil
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background_default.png"
@@ -37,6 +40,11 @@ class BadgePrinter:
 
         if not os.path.exists(OUTPUTDIR):
             os.makedirs(OUTPUTDIR)
+            for fileName in os.listdir("badges"):
+                if not re.search(".png", fileName):
+                    continue
+                shutil.copy("badges/%s" % fileName, "%s/%s" %
+                    (OUTPUTDIR, fileName))
 
     def generateBadges(self, participants, pageNumber, background=None):
         badgesPage = self.badgesPage
@@ -103,7 +111,10 @@ def main(args):
                 counter += 1
     print("Total pages:", pages)
     print("Total badges:", counter)
-    os.system("pdfunite %s/*.pdf  all_badges.pdf" % OUTPUTDIR)
+    pdfFiles = []
+    for p in range(1, pages):
+        pdfFiles.append("%s/badge-%02d.pdf" % (OUTPUTDIR, p))
+    os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
 
 
 
