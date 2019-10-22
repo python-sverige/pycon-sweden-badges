@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- encoding: utf-8 -*-
+# coding=utf-8
 import argparse
 import csv
 import math
@@ -7,227 +7,113 @@ import os
 import subprocess
 import textwrap
 import sys
+import html
 
 BADGESIZE = "80x50"
-DEFAULTBACKGROUND = "background.png"
-BLANKS = 6
+DEFAULTBACKGROUND = "background_default.png"
+BLANKS = 12
+BADGES_PER_PAGE = 4
+BADGES_TEMPLATE = "badges/4BadgesOnA4.svg"
 BADGES = {
-	"Business" : "background.png",
-	"Business - Invoiced" : "background.png",
-	"Early Bird" : "background.png",
-	"Personal" : "background.png",
-	"Speakers" : "background_speaker.png",
-	"Student" : "background_student.png",
-	"Volunteers and board" : "background_organization.png"
+    "Business" : DEFAULTBACKGROUND,
+    "Business - Invoiced" : DEFAULTBACKGROUND,
+    "Early Bird" : DEFAULTBACKGROUND,
+    "Personal" : DEFAULTBACKGROUND,
+    "Speakers" : "background_speaker.png",
+    "Student" : "background_student.png",
+    "Volunteers and board" : "background_organization.png"
 }
+
+OUTPUTDIR = "generated"
+
+# it doesn't work...
+os.environ["PYTHONIOENCODING"] = "utf-8"
 
 class BadgePrinter:
 
-	def __init__(self):
+    def __init__(self):
+        with open("badges/4BadgesOnA4.svg", encoding="UTF-8") as fileDescr:
+            self.badgesPage = fileDescr.read()
 
-		# sizes in mm
+        if not os.path.exists(OUTPUTDIR):
+            os.makedirs(OUTPUTDIR)
 
-		self.badge_width, self.badge_height = self.getSize(BADGESIZE)
-		self.badge_padding = 2
-		self.badge_width += 2 * self.badge_padding
-		self.badge_height += 2 * self.badge_padding
-
-		self.paper_width = 210 # A4 paper
-
-		self.page_leftmargin = 20
-		self.page_topmargin = 13
-
-		# duplex printer tend to shift content horizontally when duplexing
-		# this offset can be corrected here
-		self.printer_leftmargin_offset_flipside = 0
-
-		self.header_height = 18.3
-
-		self.tex_document = ''
-		self.badge_counter = 0
-		self.backside = []
-
-		self._tex_header = textwrap.dedent(r'''			\documentclass[a4paper]{article}
-			\usepackage[a4paper, margin=0pt]{geometry}
-			\usepackage[utf8]{inputenc}
-			%\usepackage[dvips]{geometry}
-			\usepackage[texcoord]{eso-pic}
-			\usepackage{picture}
-			%\usepackage{parskip}
-			\usepackage{graphicx}
-			%\usepackage{array}
-			\usepackage{xcolor}
-
-			\usepackage[default]{raleway}
-
-			%\setlength{\oddsidemargin}{-15mm}
-			\pagestyle{empty}
-
-			\begin{document}
-		''')
-
-		self._tex_footer = textwrap.dedent(r'''	      \end{document}''')
-
-		self._tex_newpage = textwrap.dedent(r'''			\vspace*{\fill}
-			\newpage
-		''')
-
-	def getSize(self, sizeText):
-		x = int(sizeText.split("x")[0])
-		y = int(sizeText.split("x")[1])
-		return (x, y)
-
-	def tex_header(self):
-		self.tex_document += self._tex_header
-
-	def tex_footer(self):
-		self.tex_document += self._tex_footer
-
-	def tex_newpage(self):
-		self.tex_document += self._tex_newpage
-
-	def add_badge(self, position, name, affiliation, background):
-		# left or right badge, x=0 -> left, x=1 -> right
-		x = position % 2
-		# badge number from top
-		y = int(math.ceil((position + 1)/2.0))
-		TAB = "\t"
-
-		print("\tx=", x)
-		print("\ty=", y)
-		badge_inner_width = self.badge_width - 2*self.badge_padding
-		badge_inner_height = self.badge_height - 2*self.badge_padding
-
-		left_margin = self.page_leftmargin + x*self.badge_width
-
-		self.tex_document += textwrap.dedent("""%s\\AddToShipoutPictureBG*{\n""" %
-			(3 * TAB ))
-		self.tex_document += textwrap.dedent("""%s%%\\put(%smm,%smm)""" %
-			(4 * TAB,
-			left_margin,
-			-(self.page_topmargin + y*self.badge_height)))
-		self.tex_document += textwrap.dedent("""{\\framebox(%smm,%smm){}}\n""" %
-			(self.badge_width,
-			self.badge_height))
-		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
-			(4 * TAB,
-			left_margin + self.badge_padding,
-			-(self.page_topmargin + y*self.badge_height - self.badge_padding)))
-		self.tex_document += textwrap.dedent("""{\\framebox(%smm,%smm){}}\n""" %
-			(badge_inner_width,
-			badge_inner_height))
-		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
-			(4 * TAB,
-			left_margin + self.badge_padding,
-			-(self.page_topmargin + (y-1)*self.badge_height + self.badge_padding+50)))
-		self.tex_document += textwrap.dedent("""{\\includegraphics[width=80mm,height=50mm]{%s}}\n""" %
-			(background))
-		self.tex_document += textwrap.dedent("""%s\\put(%smm,%smm)""" %
-			(4 * TAB,
-			left_margin + self.badge_padding,
-			-(self.page_topmargin + y*self.badge_height - self.badge_padding)))
-		self.tex_document += textwrap.dedent("""{\\makebox(%smm,%smm)""" %
-			(badge_inner_width,
-			badge_inner_height - self.header_height))
-		self.tex_document += textwrap.dedent("""{\\parbox{80mm}{\\centering""")
-		self.tex_document += textwrap.dedent("""{\\fontsize{20}{20}\\selectfont""")
-		self.tex_document += textwrap.dedent("""\\textbf{%s}\\\\\\vspace{2mm}""" %
-			(name))
-		self.tex_document += textwrap.dedent("""\\fontsize{12}{12}\\selectfont""")
-		self.tex_document += textwrap.dedent("""\\textit{%s}}}}}\n""" %
-			affiliation)
-		self.tex_document += textwrap.dedent("""%s}\n""" % (3 * TAB))
-
-	def next_badge(self, name, affiliation, background):
-		affiliation = affiliation.replace('&', '\\&')
-		self.add_badge(self.badge_counter % 10, name, affiliation, background)
-
-		self.backside.append((name, affiliation))
-
-		self.badge_counter += 1
-
-		if self.badge_counter % 10 == 0:
-			self.tex_newpage()
-			self.flush_backside(background)
-
-	def flush_backside(self, background):
-		return
-		# skip everything
-		backsideSize = int(len(self.backside)/2)
-		for i in range(backsideSize):
-			tmp = self.backside[2*i]
-			self.backside[2*i] = self.backside[2*i+1]
-			self.backside[2*i+1] = tmp
-
-		if len(self.backside) % 2:
-			self.backside.append(self.backside[-1])
-			self.backside[-2] = None
-
-		for i, r in enumerate(self.backside):
-			if r is not None:
-				self.add_badge(i, r[0], r[1], background, flipside=True)
-
-		self.backside = []
-		self.tex_newpage()
-
-	def flush_badges(self, background):
-		if self.backside:
-			self.tex_newpage()
-			self.flush_backside(background)
+    def generateBadges(self, participants, pageNumber, background=None):
+        badgesPage = self.badgesPage
+        mainBackground = None
+        if background is not None:
+            mainBackground = background
+        for position, entry in enumerate(participants):
+            fullName, company, ticketType, jobTitle = entry
+            #if (position % 2) == 0:
+            #    print("\t", position, fullName, end='')
+            #else:
+            #    print("\t", position, fullName)
+            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), fullName[:15])
+            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), company[:16])
+            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), jobTitle[:16])
+            badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), "")
+            if mainBackground:
+                background = mainBackground
+                print(" * background=%s defined for %s" % (background,fullName))
+                pass
+            elif not ticketType in BADGES:
+                background = DEFAULTBACKGROUND
+                print("no ticketType background defined for %s" % fullName)
+            else:
+                background = BADGES[ticketType]
+                print("background=%s for %s" % (background, fullName))
+            badgesPage = badgesPage.replace("background_{}.png".format(position + 1), background)
+        target = "%s/badge-%02d.svg" % (OUTPUTDIR, pageNumber)
+        pdf = "%s/badge-%02d.pdf" % (OUTPUTDIR, pageNumber)
+        with open(target, "w", encoding="UTF-8") as output:
+            output.write(badgesPage)
+        print("Generating page:", pageNumber)
+        os.system("rsvg-convert -f pdf -o %s %s" % (pdf, target))
 
 def main(args):
-	with open(args.csv_file, encoding='utf-8') as f:
+    with open(args.csv_file, encoding='utf-8') as csvFile:
+        bdg = BadgePrinter()
+        reader = csv.DictReader(csvFile)
+        counter = 0
+        pages = 1
+        participants = []
 
-		b = BadgePrinter()
-		b.tex_header()
-		reader = csv.DictReader(f)
-		counter = 0
-		for row in reader:
-			#if (args.limit and row['Order #'] in args.limit) or not args.limit:
-			#	b.next_badge(row['First Name'], row['Last Name'])
+        for row in reader:
+            if row["Attendee Status"] != "Attending":
+                continue
+            fullName = html.escape(row['First Name'] + " " + row['Last Name'])
+            company = html.escape(row['Company'])
+            ticketType = row['Ticket Type']
+            jobTitle = html.escape(row['Job Title'])
+            print(u"%d) %s from %s at %s as %s" % \
+                (counter, fullName, company, ticketType, jobTitle))
+            participants.append([fullName, company, ticketType, jobTitle])
+            if len(participants) >= BADGES_PER_PAGE:
+                bdg.generateBadges(participants, pages)
+                participants = []
+                pages += 1
+            counter += 1
+        for bg in [DEFAULTBACKGROUND,  BADGES["Student"], BADGES["Speakers"], BADGES["Volunteers and board"]]:
+            blanks = []
+            for x in range(BLANKS):
+                print("Blank: ", x)
+                blanks.append(["", "", "", ""])
+                if len(blanks) >= BADGES_PER_PAGE:
+                    bdg.generateBadges(blanks, pages, background=bg)
+                    blanks = []
+                    pages += 1
+                counter += 1
+    print("Total pages:", pages)
+    print("Total badges:", counter)
+    os.system("pdfunite %s/*.pdf  all_badges.pdf" % OUTPUTDIR)
 
-			if row["Attendee Status"] != "Attending":
-				continue
-			fullName = row['First Name'] + " " + row['Last Name']
-			company = row['Company']
-			ticketType = row['Ticket Type']
-			jobTitle = row['Job Title']
-			if len(company) > 0:
-				if len(jobTitle) > 0:
-					jobTitle += " at " + company
-				else:
-					jobTitle = company
-			print(counter, fullName, company, ticketType, jobTitle)
-			if not ticketType in BADGES:
-				background = DEFAULTBACKGROUND
-			else:
-				background = BADGES[ticketType]
-			b.next_badge(fullName, jobTitle, background)
-			counter += 1
-		for x in range(BLANKS):
-			print("Blank: ", x)
-			b.next_badge("", "", DEFAULTBACKGROUND)
 
-	#b.flush_badges(DEFAULTBACKGROUND)
-	b.tex_footer()
-
-	p = subprocess.Popen(['pdflatex', '-jobname=badges'],
-			stdin=subprocess.PIPE,
-			stdout=subprocess.DEVNULL,
-			encoding='utf8')
-
-	with open('debug.tex', 'w', encoding="utf-8") as f:
-		f.write(b.tex_document)
-
-	p.communicate(input=b.tex_document)
-
-	os.remove('badges.aux')
-	os.remove('badges.log')
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser(description='Create badges for IMC2017.')
-	parser.add_argument('csv_file', help='CSV file with input data')
+    parser = argparse.ArgumentParser(description='Create badges for IMC2017.')
+    parser.add_argument('csv_file', help='CSV file with input data')
 
-	args = parser.parse_args()
+    args = parser.parse_args()
 
-	main(args)
+    main(args)
