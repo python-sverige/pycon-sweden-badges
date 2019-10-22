@@ -45,24 +45,21 @@ class BadgePrinter:
             mainBackground = background
         for position, entry in enumerate(participants):
             fullName, company, ticketType, jobTitle = entry
-            #if (position % 2) == 0:
-            #    print("\t", position, fullName, end='')
-            #else:
-            #    print("\t", position, fullName)
+            if (position % 2) == 0:
+                print("\t", position, fullName, end='')
+            else:
+                print("\t", position, fullName)
             badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), fullName[:15])
             badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), company[:16])
             badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), jobTitle[:16])
             badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), "")
             if mainBackground:
                 background = mainBackground
-                print(" * background=%s defined for %s" % (background,fullName))
                 pass
             elif not ticketType in BADGES:
                 background = DEFAULTBACKGROUND
-                print("no ticketType background defined for %s" % fullName)
             else:
                 background = BADGES[ticketType]
-                print("background=%s for %s" % (background, fullName))
             badgesPage = badgesPage.replace("background_{}.png".format(position + 1), background)
         target = "%s/badge-%02d.svg" % (OUTPUTDIR, pageNumber)
         pdf = "%s/badge-%02d.pdf" % (OUTPUTDIR, pageNumber)
