@@ -114,7 +114,9 @@ def main(args):
     pdfFiles = []
     for p in range(1, pages):
         pdfFiles.append("%s/badge-%02d.pdf" % (OUTPUTDIR, p))
-    os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
+    #os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
+    # ghostscript just because there is no pdfunit in macos
+    os.system("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
 
 
 
