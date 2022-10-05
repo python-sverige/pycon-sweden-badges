@@ -18,13 +18,18 @@ BLANKS = 12
 BADGES_PER_PAGE = 4
 BADGES_TEMPLATE = "badges/4BadgesOnA4.svg"
 BADGES = {
-    "Business" : DEFAULTBACKGROUND,
-    "Business - Invoiced" : DEFAULTBACKGROUND,
     "Early Bird" : DEFAULTBACKGROUND,
-    "Personal" : DEFAULTBACKGROUND,
-    "Speakers" : "background_speaker.png",
+    "Early Bird Special" : DEFAULTBACKGROUND,
+    "Authors Thank You Ticket" : DEFAULTBACKGROUND,
+    "Business" : DEFAULTBACKGROUND,
+    "Personal" : "background_personal.png",
     "Student" : "background_student.png",
-    "Volunteers and board" : "background_organization.png"
+    "Business - Invoiced" : DEFAULTBACKGROUND,
+    "Volunteers and board" : "background_organization.png",
+    "Speakers" : "background_speaker.png",
+    "Last call" : "background_lastcall.png",
+    "Business 50%" : DEFAULTBACKGROUND,
+    "Sponsors" : DEFAULTBACKGROUND
 }
 
 OUTPUTDIR = "generated"
@@ -32,34 +37,45 @@ OUTPUTDIR = "generated"
 # it doesn't work...
 os.environ["PYTHONIOENCODING"] = "utf-8"
 
-class BadgePrinter:
+def createDirs(directory):
+    '''
+    It creates the need directory if it isn't there yet.
+    '''
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
+class BadgePrinter:
     def __init__(self):
         with open("badges/4BadgesOnA4.svg", encoding="UTF-8") as fileDescr:
             self.badgesPage = fileDescr.read()
 
-        if not os.path.exists(OUTPUTDIR):
-            os.makedirs(OUTPUTDIR)
-            for fileName in os.listdir("badges"):
-                if not re.search(".png", fileName):
-                    continue
-                shutil.copy("badges/%s" % fileName, "%s/%s" %
-                    (OUTPUTDIR, fileName))
+        createDirs(OUTPUTDIR)
+
+        for fileName in os.listdir("badges"):
+            if not re.search(".png", fileName):
+                continue
+            shutil.copy(f"badges/{fileName}", f"{OUTPUTDIR}/{fileName}")
 
     def generateBadges(self, participants, pageNumber, background=None):
+        print(f"-= PageNumber: {pageNumber} =-")
         badgesPage = self.badgesPage
         mainBackground = None
         if background is not None:
             mainBackground = background
         for position, entry in enumerate(participants):
-            fullName, company, ticketType, jobTitle = entry
+            try:
+                fullName, ticketType = entry
+            except ValueError as e:
+                print("Error in: ", entry)
+                raise Exception(e)
             if (position % 2) == 0:
                 print("\t", position, fullName, end='')
             else:
                 print("\t", position, fullName)
-            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), fullName[:15])
-            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), company[:16])
-            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), jobTitle[:16])
+            namePieces = fullName.split(" ")
+            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), namePieces[0])
+            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), namePieces[-1])
+            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), "")
             badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), "")
             if mainBackground:
                 background = mainBackground
@@ -68,13 +84,27 @@ class BadgePrinter:
                 background = DEFAULTBACKGROUND
             else:
                 background = BADGES[ticketType]
+            if not os.path.exists(background):
+                raise Exception(f"{background} not found")
             badgesPage = badgesPage.replace("background_{}.png".format(position + 1), background)
-        target = "%s/badge-%02d.svg" % (OUTPUTDIR, pageNumber)
-        pdf = "%s/badge-%02d.pdf" % (OUTPUTDIR, pageNumber)
+        target = f"{OUTPUTDIR}/badge-{pageNumber}.svg"
+        pdf = f"{OUTPUTDIR}/badge-{pageNumber}.pdf"
         with open(target, "w", encoding="UTF-8") as output:
             output.write(badgesPage)
         print("Generating page:", pageNumber)
         os.system("rsvg-convert -f pdf -o %s %s" % (pdf, target))
+
+def getBackGround(ticketCode):
+    if ticketCode in BADGES:
+        return BADGES[ticketCode]
+    raise Exception(f"Unknown ticket code: {ticketCode}")
+
+def groupBackGrounds(array_ticketCodes):
+    result = []
+    for ticketCode in array_ticketCodes:
+        result.append(getBackGround(ticketCode))
+
+    return result
 
 def main(args):
     with open(args.csv_file, encoding='utf-8') as csvFile:
@@ -87,23 +117,32 @@ def main(args):
         for row in reader:
             if row["Attendee Status"] != "Attending":
                 continue
-            fullName = html.escape(row['First Name'] + " " + row['Last Name'])
-            company = html.escape(row['Company'])
+            fullName = html.escape(row['Name'])
+            #company = html.escape(row['Company'])
             ticketType = row['Ticket Type']
-            jobTitle = html.escape(row['Job Title'])
-            print(u"%d) %s from %s at %s as %s" % \
-                (counter, fullName, company, ticketType, jobTitle))
-            participants.append([fullName, company, ticketType, jobTitle])
+            #jobTitle = html.escape(row['Jmeob Title'])
+            #print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
+            print(f"{counter}) {fullName} from at {ticketType}")
+            participants.append([fullName, ticketType])
             if len(participants) >= BADGES_PER_PAGE:
                 bdg.generateBadges(participants, pages)
                 participants = []
                 pages += 1
             counter += 1
-        for bg in [DEFAULTBACKGROUND,  BADGES["Student"], BADGES["Speakers"], BADGES["Volunteers and board"]]:
+
+        # it ended in nr different than 4
+        if len(participants) > 0: 
+            for dummy in range(4 - len(participants)):
+                participants.append(["", "Business"])
+            bdg.generateBadges(participants, pages)
+            pages += 1
+
+        # generating blanks
+        for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
             blanks = []
             for x in range(BLANKS):
                 print("Blank: ", x)
-                blanks.append(["", "", "", ""])
+                blanks.append(["",  ""])
                 if len(blanks) >= BADGES_PER_PAGE:
                     bdg.generateBadges(blanks, pages, background=bg)
                     blanks = []
@@ -113,7 +152,7 @@ def main(args):
     print("Total badges:", counter)
     pdfFiles = []
     for p in range(1, pages):
-        pdfFiles.append("%s/badge-%02d.pdf" % (OUTPUTDIR, p))
+        pdfFiles.append(f"{OUTPUTDIR}/badge-{p}.pdf")
     #os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
     # ghostscript just because there is no pdfunit in macos
     os.system("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
