@@ -51,10 +51,10 @@ class BadgePrinter:
 
         createDirs(OUTPUTDIR)
 
-        for fileName in os.listdir("badges"):
-            if not re.search(".png", fileName):
-                continue
-            shutil.copy(f"badges/{fileName}", f"{OUTPUTDIR}/{fileName}")
+        #for fileName in os.listdir("badges"):
+        #    if not re.search(".png", fileName):
+        #        continue
+        #    shutil.copy(f"badges/{fileName}", f"{OUTPUTDIR}/{fileName}")
 
     def generateBadges(self, participants, pageNumber, background=None):
         print(f"-= PageNumber: {pageNumber} =-")
@@ -84,15 +84,20 @@ class BadgePrinter:
                 background = DEFAULTBACKGROUND
             else:
                 background = BADGES[ticketType]
-            if not os.path.exists(background):
+            if not os.path.exists("badges/" + background):
                 raise Exception(f"{background} not found")
             badgesPage = badgesPage.replace("background_{}.png".format(position + 1), background)
-        target = f"{OUTPUTDIR}/badge-{pageNumber}.svg"
+            cwd = os.path.abspath(os.path.curdir)
+            badgesPage = badgesPage.replace("$PWD", cwd)
+
+        svg = f"{OUTPUTDIR}/badge-{pageNumber}.svg"
         pdf = f"{OUTPUTDIR}/badge-{pageNumber}.pdf"
-        with open(target, "w", encoding="UTF-8") as output:
+        with open(svg, "w", encoding="UTF-8") as output:
             output.write(badgesPage)
         print("Generating page:", pageNumber)
-        os.system("rsvg-convert -f pdf -o %s %s" % (pdf, target))
+        #os.system(f"rsvg-convert -f pdf -o {pdf} {target}")
+        ### using inkscape directly
+        os.system(f"cat {svg}  | inkscape --pipe --export-filename={pdf}")
 
 def getBackGround(ticketCode):
     if ticketCode in BADGES:
@@ -122,7 +127,8 @@ def main(args):
             ticketType = row['Ticket Type']
             #jobTitle = html.escape(row['Jmeob Title'])
             #print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
-            print(f"{counter}) {fullName} from at {ticketType}")
+            background = getBackGround(ticketType)
+            print(f"{counter}) {fullName} from at {ticketType} using bg {background}")
             participants.append([fullName, ticketType])
             if len(participants) >= BADGES_PER_PAGE:
                 bdg.generateBadges(participants, pages)
@@ -138,7 +144,8 @@ def main(args):
             pages += 1
 
         # generating blanks
-        for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
+        #for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
+        for bg in groupBackGrounds(["Last call"]):
             blanks = []
             for x in range(BLANKS):
                 print("Blank: ", x)
