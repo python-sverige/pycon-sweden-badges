@@ -29,7 +29,8 @@ BADGES = {
     "Speakers" : "background_speaker.png",
     "Last call" : "background_lastcall.png",
     "Business 50%" : DEFAULTBACKGROUND,
-    "Sponsors" : DEFAULTBACKGROUND
+    "Sponsors" : DEFAULTBACKGROUND,
+    "Pyladies" : DEFAULTBACKGROUND
 }
 
 OUTPUTDIR = "generated"
