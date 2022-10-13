@@ -113,7 +113,7 @@ def groupBackGrounds(array_ticketCodes):
     return result
 
 def main(args):
-    with open(args.csv_file, encoding='utf-8') as csvFile:
+    with open(args.csvfile, encoding='utf-8') as csvFile:
         bdg = BadgePrinter()
         reader = csv.DictReader(csvFile)
         counter = 0
@@ -168,9 +168,12 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Create badges for IMC2017.')
-    parser.add_argument('csv_file', help='CSV file with input data')
-
+    print('step 1')
+    parser = argparse.ArgumentParser(description='Create badges for PyCon Sweden 2022.')
+    print('step 2')
+    parser.add_argument('--csvfile', help='CSV file with input data')
+    print('step 3')
     args = parser.parse_args()
-
+    print('args:', args)
+    print('step 4')
     main(args)
