@@ -11,6 +11,7 @@ import html
 import sys
 import re
 import shutil
+import subprocess
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background_default.png"
@@ -45,17 +46,15 @@ def createDirs(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+def shellExec(command):
+    return subprocess.check_output(command.split(), stderr=subprocess.STDOUT, shell=False)
+
 class BadgePrinter:
     def __init__(self):
         with open("badges/4BadgesOnA4.svg", encoding="UTF-8") as fileDescr:
             self.badgesPage = fileDescr.read()
 
         createDirs(OUTPUTDIR)
-
-        #for fileName in os.listdir("badges"):
-        #    if not re.search(".png", fileName):
-        #        continue
-        #    shutil.copy(f"badges/{fileName}", f"{OUTPUTDIR}/{fileName}")
 
     def generateBadges(self, participants, pageNumber, background=None):
         print(f"-= PageNumber: {pageNumber} =-")
@@ -65,7 +64,7 @@ class BadgePrinter:
             mainBackground = background
         for position, entry in enumerate(participants):
             try:
-                fullName, ticketType = entry
+                fullName, ticketType, company, jobTitle = entry
             except ValueError as e:
                 print("Error in: ", entry)
                 raise Exception(e)
@@ -73,11 +72,17 @@ class BadgePrinter:
                 print("\t", position, fullName, end='')
             else:
                 print("\t", position, fullName)
-            namePieces = fullName.split(" ")
-            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), namePieces[0])
-            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), namePieces[-1])
-            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), "")
-            badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), "")
+            nameBlks = fullName.split(" ")
+            if len(nameBlks) >= 2:
+                firstName = nameBlks[0]
+                lastName = nameBlks[1]
+            else:
+                firstName = ""
+                lastName = ""
+            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), firstName)
+            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), lastName)
+            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), jobTitle)
+            badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), company)
             if mainBackground:
                 background = mainBackground
                 pass
@@ -96,9 +101,7 @@ class BadgePrinter:
         with open(svg, "w", encoding="UTF-8") as output:
             output.write(badgesPage)
         print("Generating page:", pageNumber)
-        #os.system(f"rsvg-convert -f pdf -o {pdf} {target}")
-        ### using inkscape directly
-        os.system(f"cat {svg}  | inkscape --pipe --export-filename={pdf}")
+        shellExec(f"inkscape --pipe --export-filename={pdf} {svg}")
 
 def getBackGround(ticketCode):
     if ticketCode in BADGES:
@@ -112,9 +115,28 @@ def groupBackGrounds(array_ticketCodes):
 
     return result
 
+def getUserDataFormatted(fullName=None, ticketType=None, company=None, jobTitle=None):
+    if fullName is None:
+        fullName = ""
+    if ticketType is None:
+        ticketType = ""
+    if company is None:
+        company = ""
+    if jobTitle is None:
+        jobTitle = ""
+
+    return [ fullName, ticketType, company, jobTitle]
+    
+
+def resetParticipantsData():
+    return []
+
+def numberOfParticipants(participantsList):
+    return len(participantsList)
+
 def main(args):
     with open(args.csvfile, encoding='utf-8') as csvFile:
-        bdg = BadgePrinter()
+        bdgp = BadgePrinter()
         reader = csv.DictReader(csvFile)
         counter = 0
         pages = 1
@@ -124,36 +146,35 @@ def main(args):
             if row["Attendee Status"] != "Attending":
                 continue
             fullName = html.escape(row['Name'])
-            #company = html.escape(row['Company'])
-            ticketType = row['Ticket Type']
-            #jobTitle = html.escape(row['Jmeob Title'])
-            #print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
+            company = html.escape(row['Company'])
+            ticketType = html.escape(row['Ticket Type'])
+            jobTitle = html.escape(row['Job title'])
+            print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
             background = getBackGround(ticketType)
-            print(f"{counter}) {fullName} from at {ticketType} using bg {background}")
-            participants.append([fullName, ticketType])
-            if len(participants) >= BADGES_PER_PAGE:
-                bdg.generateBadges(participants, pages)
-                participants = []
+            participants.append(getUserDataFormatted(fullName, ticketType, company, jobTitle))
+            if numberOfParticipants(participants) >= BADGES_PER_PAGE:
+                bdgp.generateBadges(participants, pages)
+                participants = resetParticipantsData()
                 pages += 1
             counter += 1
 
         # it ended in nr different than 4
         if len(participants) > 0: 
             for dummy in range(4 - len(participants)):
-                participants.append(["", "Business"])
-            bdg.generateBadges(participants, pages)
+                participants.append(getUserDataFormatted(ticketType="Business"))
+            bdgp.generateBadges(participants, pages)
             pages += 1
 
         # generating blanks
         #for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
         for bg in groupBackGrounds(["Last call"]):
-            blanks = []
+            blanks = resetParticipantsData()
             for x in range(BLANKS):
                 print("Blank: ", x)
-                blanks.append(["",  ""])
+                blanks.append(getUserDataFormatted())
                 if len(blanks) >= BADGES_PER_PAGE:
-                    bdg.generateBadges(blanks, pages, background=bg)
-                    blanks = []
+                    bdgp.generateBadges(blanks, pages, background=bg)
+                    blanks = resetParticipantsData()
                     pages += 1
                 counter += 1
     print("Total pages:", pages)
@@ -163,17 +184,13 @@ def main(args):
         pdfFiles.append(f"{OUTPUTDIR}/badge-{p}.pdf")
     #os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
     # ghostscript just because there is no pdfunit in macos
-    os.system("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
+    shellExec("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
 
 
 
 if __name__ == '__main__':
-    print('step 1')
     parser = argparse.ArgumentParser(description='Create badges for PyCon Sweden 2022.')
-    print('step 2')
     parser.add_argument('--csvfile', help='CSV file with input data')
-    print('step 3')
+
     args = parser.parse_args()
-    print('args:', args)
-    print('step 4')
     main(args)
