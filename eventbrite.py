@@ -145,10 +145,11 @@ def main(args):
         for row in reader:
             if row["Attendee Status"] != "Attending":
                 continue
+            # limit to 50 characters for company and job title
             fullName = html.escape(row['Name'])
-            company = html.escape(row['Company'])
+            company = html.escape(row['Company'])[:48]
             ticketType = html.escape(row['Ticket Type'])
-            jobTitle = html.escape(row['Job title'])
+            jobTitle = html.escape(row['Job title'])[:48]
             print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
             background = getBackGround(ticketType)
             participants.append(getUserDataFormatted(fullName, ticketType, company, jobTitle))
