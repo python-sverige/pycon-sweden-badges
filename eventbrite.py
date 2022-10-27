@@ -15,7 +15,7 @@ import subprocess
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background_default.png"
-BLANKS = 12
+BLANKS = 40
 BADGES_PER_PAGE = 4
 BADGES_TEMPLATE = "badges/4BadgesOnA4.svg"
 BADGES = {
@@ -31,7 +31,9 @@ BADGES = {
     "Last call" : "background_lastcall.png",
     "Business 50%" : DEFAULTBACKGROUND,
     "Sponsors" : DEFAULTBACKGROUND,
-    "Pyladies" : DEFAULTBACKGROUND
+    "Pyladies" : DEFAULTBACKGROUND,
+    "Personal - invoiced" : "background_personal.png",
+    "Wait list" : DEFAULTBACKGROUND
 }
 
 OUTPUTDIR = "generated"
@@ -65,6 +67,9 @@ class BadgePrinter:
         for position, entry in enumerate(participants):
             try:
                 fullName, ticketType, company, jobTitle = entry
+                # some companies are too wide
+                if len(company) > 45:
+                    company = company[:45]
             except ValueError as e:
                 print("Error in: ", entry)
                 raise Exception(e)
@@ -101,7 +106,7 @@ class BadgePrinter:
         with open(svg, "w", encoding="UTF-8") as output:
             output.write(badgesPage)
         print("Generating page:", pageNumber)
-        shellExec(f"inkscape --pipe --export-filename={pdf} {svg}")
+        shellExec(f"inkscape --pipe --export-dpi=300 --export-filename={pdf} {svg}")
 
 def getBackGround(ticketCode):
     if ticketCode in BADGES:
