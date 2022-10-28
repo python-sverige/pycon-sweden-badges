@@ -1,4 +1,4 @@
-Order #,Order Date,Name,Email,Quantity,Ticket Type,Order Type,Total Paid,Eventbrite Fees,Eventbrite Payment Processing,Attendee Status,Food allergies / Dietary restrictions?,Job Title,Company
+Order #,Order Date,Name,Email,Quantity,Ticket Type,Order Type,Total Paid,Eventbrite Fees,Eventbrite Payment Processing,Attendee Status,Food allergies / Dietary restrictions?,Job title,Company
 123456789,2019-10-12 18:52:16+02:00,Helio Loureiro,helio@loureiro,1,Early Bird,PayPal Completed,1000.00,150.00,0.00,Attending,,Software Developer,PyCon Sweden board
 123456788,2019-07-25 15:39:45+02:00,Linus Torvalds,linus@torvalds,1,Speakers,PayPal Completed,0.00,0.00,0.00,Attending,,Linux BDFL,Linux Foundation
 123456787,2019-08-26 15:39:45+02:00,Marcelo Italy,marcelo@italy,1,Student,PayPal Completed,100.00,30.00,0.00,Attending,,Student,

@@ -106,7 +106,7 @@ class BadgePrinter:
         with open(svg, "w", encoding="UTF-8") as output:
             output.write(badgesPage)
         print("Generating page:", pageNumber)
-        shellExec(f"inkscape --pipe --export-dpi=300 --export-filename={pdf} {svg}")
+        shellExec(f"inkscape --pipe --export-dpi=600 --export-filename={pdf} {svg}")
 
 def getBackGround(ticketCode):
     if ticketCode in BADGES:
