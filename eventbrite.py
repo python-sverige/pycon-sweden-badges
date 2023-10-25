@@ -26,6 +26,7 @@ BADGES = {
     "Personal" : "background_personal.png",
     "Student" : "background_student.png",
     "Business - Invoiced" : DEFAULTBACKGROUND,
+    "Business discounted" : DEFAULTBACKGROUND,
     "Volunteers and board" : "background_organization.png",
     "Speakers" : "background_speaker.png",
     "Last call" : "background_lastcall.png",
