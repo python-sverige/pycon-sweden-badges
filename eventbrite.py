@@ -151,7 +151,10 @@ def main(args):
             if row["Attendee Status"] != "Attending":
                 continue
             # limit to 50 characters for company and job title
-            fullName = html.escape(row['Name'])
+            try:
+                fullName = html.escape(row['Name']) 
+            except KeyError:
+                fullName = " ".join([ html.escape(row['First Name']), html.escape(row['Last Name']) ])
             company = html.escape(row['Company'])[:48]
             ticketType = html.escape(row['Ticket Type'])
             jobTitle = html.escape(row['Job title'])[:48]
@@ -196,7 +199,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create badges for PyCon Sweden 2022.')
-    parser.add_argument('--csvfile', help='CSV file with input data')
+    parser.add_argument('--csvfile', required=True, help='CSV file with input data')
 
     args = parser.parse_args()
     main(args)
