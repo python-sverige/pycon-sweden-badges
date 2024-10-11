@@ -155,7 +155,7 @@ def main(args):
             try:
                 fullName = html.escape(row['Name']) 
             except KeyError:
-                fullName = " ".join([ html.escape(row['First Name']), html.escape(row['Last Name']) ])
+                fullName = " ".join([ html.escape(row['First Name']), html.escape(row['Surname']) ])
             company = html.escape(row['Company'])[:48]
             ticketType = html.escape(row['Ticket Type'])
             jobTitle = html.escape(row['Job title'])[:48]
