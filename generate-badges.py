@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # coding=utf-8
 import argparse
-import csv
 import math
 import os
 import subprocess
 import textwrap
 import sys
-import html
 import sys
 import re
 import shutil
@@ -15,7 +13,7 @@ import subprocess
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background_default.png"
-BLANKS = 40
+BLANKS = 10
 BADGES_PER_PAGE = 4
 BADGES_TEMPLATE = "badges/4BadgesOnA4.svg"
 BADGES = {
@@ -36,6 +34,8 @@ BADGES = {
     "Personal - invoiced" : "background_personal.png",
     "Wait list" : DEFAULTBACKGROUND
 }
+
+CARACTERS_LIMIT = 48 # more than that would get trimmed
 
 OUTPUTDIR = "generated"
 
@@ -64,43 +64,42 @@ class BadgePrinter:
         badgesPage = self.badgesPage
         mainBackground = None
         if background is not None:
-            mainBackground = background
-        for position, entry in enumerate(participants):
-            try:
-                fullName, ticketType, company, jobTitle = entry
-                # some companies are too wide
-                if len(company) > 45:
-                    company = company[:45]
-            except ValueError as e:
-                print("Error in: ", entry)
-                raise Exception(e)
+            main_background = background
+        position = 0
+        print("participants:", participants)
+        for entry in participants:
+            first_name = entry["first_name"]
+            last_name = entry["last_name"]
+            company = entry["company"]
+            ticket_type = entry["ticket_type"]
+            job_title = entry["job_title"]
+
+            # shorten too wide entries
+            for entry in [ first_name, last_name, company, job_title ]:
+                if len(entry) > CARACTERS_LIMIT:
+                    entry = entry[:CARACTERS_LIMIT]
+
             if (position % 2) == 0:
-                print("\t", position, fullName, end='')
+                print(f"\t{position} {first_name} {last_name}", end='')
             else:
-                print("\t", position, fullName)
-            nameBlks = fullName.split(" ")
-            if len(nameBlks) >= 2:
-                firstName = nameBlks[0]
-                lastName = nameBlks[1]
-            else:
-                firstName = ""
-                lastName = ""
-            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), firstName)
-            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), lastName)
-            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), jobTitle)
+                print(f"\t{position} {first_name} {last_name}")
+            badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), first_name)
+            badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), last_name)
+            badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), job_title)
             badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), company)
             if mainBackground:
                 background = mainBackground
                 pass
-            elif not ticketType in BADGES:
+            elif not ticket_type in BADGES:
                 background = DEFAULTBACKGROUND
             else:
-                background = BADGES[ticketType]
+                background = BADGES[ticket_type]
             if not os.path.exists("badges/" + background):
                 raise Exception(f"{background} not found")
             badgesPage = badgesPage.replace("background_{}.png".format(position + 1), background)
             cwd = os.path.abspath(os.path.curdir)
             badgesPage = badgesPage.replace("$PWD", cwd)
+            position += 1
 
         svg = f"{OUTPUTDIR}/badge-{pageNumber}.svg"
         pdf = f"{OUTPUTDIR}/badge-{pageNumber}.pdf"
@@ -121,9 +120,11 @@ def groupBackGrounds(array_ticketCodes):
 
     return result
 
-def getUserDataFormatted(fullName=None, ticketType=None, company=None, jobTitle=None):
-    if fullName is None:
-        fullName = ""
+def getUserDataFormatted(firstName=None, lastName=None, ticketType=None, company=None, jobTitle=None):
+    if firstName is None:
+        firstName = ""
+    if lastName is None:
+        lastName = ""
     if ticketType is None:
         ticketType = ""
     if company is None:
@@ -131,7 +132,14 @@ def getUserDataFormatted(fullName=None, ticketType=None, company=None, jobTitle=
     if jobTitle is None:
         jobTitle = ""
 
-    return [ fullName, ticketType, company, jobTitle]
+    return {
+        "first_name": firstName,
+        "last_name": lastName,
+        "company": company,
+        "ticket_type": ticketType,
+        "job_title": jobTitle
+    }
+    
     
 
 def resetParticipantsData():
@@ -141,66 +149,66 @@ def numberOfParticipants(participantsList):
     return len(participantsList)
 
 def main(args):
-    with open(args.csvfile, encoding='utf-8') as csvFile:
-        bdgp = BadgePrinter()
-        reader = csv.DictReader(csvFile)
-        counter = 0
-        pages = 1
-        participants = []
 
-        for row in reader:
-            if row["Attendee Status"] != "Attending":
-                continue
-            # limit to 50 characters for company and job title
+    module = None
+    if args.type == "eventbrite":
+        print("Selecting Eventbrite format")
+        import eventbritelib
+        module = eventbritelib
+    elif args.type == "pretix":
+        print("Selecting Pretix format")
+        import pretixlib
+        module = pretixlib
+    else:
+        raise Exception("Unknown --type. Use or\"eventbrite\" or \"pretix\".")
+    print("Parsing csv file:", args.csvfile)
+    participants = module.GetParticipantsFromCSV(args.csvfile)
+
+    badge = BadgePrinter()
+    # it ended in nr different than 4
+    pages = 0
+    for idx in range(0, len(participants), 4):
+        print("idx:", idx)
+        page_participants = []
+        for idx2 in range(0, 4):
+            print(" * idx2:", idx2)
             try:
-                fullName = html.escape(row['Name']) 
-            except KeyError:
-                fullName = " ".join([ html.escape(row['First Name']), html.escape(row['Surname']) ])
-            company = html.escape(row['Company'])[:48]
-            ticketType = html.escape(row['Ticket Type'])
-            jobTitle = html.escape(row['Job title'])[:48]
-            print(f"{counter}) {fullName} from {company} at {ticketType} as {jobTitle}")
-            background = getBackGround(ticketType)
-            participants.append(getUserDataFormatted(fullName, ticketType, company, jobTitle))
-            if numberOfParticipants(participants) >= BADGES_PER_PAGE:
-                bdgp.generateBadges(participants, pages)
-                participants = resetParticipantsData()
+                page_participants.append(participants[idx + idx2])
+            except IndexError:
+                page_participants.append(getUserDataFormatted())
+        badge.generateBadges(page_participants, pages)
+        pages += 1 
+
+    # for dummy in range(4 - len(participants)):
+    #     participants.append(getUserDataFormatted(ticketType="Business"))
+    # badge.generateBadges(participants, pages)
+    # pages += 1
+
+
+    # generating blanks
+    for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
+    # for bg in groupBackGrounds(["Last call"]):
+        blanks = resetParticipantsData()
+        for x in range(BLANKS):
+            print("Blank: ", x)
+            blanks.append(getUserDataFormatted())
+            if len(blanks) >= BADGES_PER_PAGE:
+                badge.generateBadges(blanks, pages, background=bg)
+                blanks = resetParticipantsData()
                 pages += 1
-            counter += 1
-
-        # it ended in nr different than 4
-        if len(participants) > 0: 
-            for dummy in range(4 - len(participants)):
-                participants.append(getUserDataFormatted(ticketType="Business"))
-            bdgp.generateBadges(participants, pages)
-            pages += 1
-
-        # generating blanks
-        #for bg in groupBackGrounds(["Business", "Student", "Speakers", "Volunteers and board", "Last call"]):
-        for bg in groupBackGrounds(["Last call"]):
-            blanks = resetParticipantsData()
-            for x in range(BLANKS):
-                print("Blank: ", x)
-                blanks.append(getUserDataFormatted())
-                if len(blanks) >= BADGES_PER_PAGE:
-                    bdgp.generateBadges(blanks, pages, background=bg)
-                    blanks = resetParticipantsData()
-                    pages += 1
-                counter += 1
-    print("Total pages:", pages)
-    print("Total badges:", counter)
     pdfFiles = []
-    for p in range(1, pages):
+    for p in range(0, pages):
         pdfFiles.append(f"{OUTPUTDIR}/badge-{p}.pdf")
     #os.system("pdfunite %s all_badges.pdf" % " ".join(pdfFiles))
     # ghostscript just because there is no pdfunit in macos
-    shellExec("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
+    shellExec("gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=generated/all_badges.pdf -dBATCH %s" % " ".join(pdfFiles))
 
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Create badges for PyCon Sweden 2022.')
-    parser.add_argument('--csvfile', required=True, help='CSV file with input data')
+    parser.add_argument('--csvfile', required=True, help='CSV file with input data.')
+    parser.add_argument('--type', required=True, help="Use [eventbrite|pretix] to select the type of csv content.")
 
     args = parser.parse_args()
     main(args)
