@@ -18,14 +18,14 @@ def GetParticipantsFromCSV(csvfile: str):
             ## Job title is missing on the CSV
             # jobTitle = html.escape(row["Job"])
             jobTitle = ""
-            payment = int(row["Order total"])
+            # payment = int(float(row["Order total"]))
             # if payment > 2500:
             #     job_title = "Business"
             # elif payment == 700:
             #     job_title = "Student"
             ## sinc there is no differenciation on the ticket type, 
             ## send all as business
-            ticketType = "Business"
+            ticketType = row.get("ticket_type", "")
             print(f"{firstName} {familyName} from {company} at {ticketType} as {jobTitle}")
             participants.append({
                 "first_name": firstName,
