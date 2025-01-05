@@ -13,7 +13,7 @@ import subprocess
 
 BADGESIZE = "80x50"
 DEFAULTBACKGROUND = "background_default.png"
-BLANKS = 10
+BLANKS = 40
 BADGES_PER_PAGE = 4
 BADGES_TEMPLATE = "badges/4BadgesOnA4.svg"
 BADGES = {
@@ -66,6 +66,7 @@ class BadgePrinter:
         if background is not None:
             main_background = background
         position = 0
+        participants = sorted(participants, key=lambda entry: entry["last_name"])
         print("participants:", participants)
         for entry in participants:
             first_name = entry["first_name"]
@@ -83,7 +84,24 @@ class BadgePrinter:
                 print(f"\t{position} {first_name} {last_name}", end='')
             else:
                 print(f"\t{position} {first_name} {last_name}")
+            person_line_1 = f"person_{position + 1}_line_1"
+            if len(first_name) > 18:
+                font_size = "20.25px"
+            elif len(first_name) > 10:
+                font_size = "26.25px"
+            else:
+                font_size = "35.25px"
+            badgesPage = badgesPage.replace(person_line_1 + "_font", font_size)
             badgesPage = badgesPage.replace("person_{}_line_1".format(position + 1), first_name)
+
+            person_line_2 = f"person_{position + 1}_line_2"
+            if len(last_name) > 18:
+                font_size = "20.25px"
+            elif len(last_name) > 10:
+                font_size = "26.25px"
+            else:
+                font_size = "35.25px"
+            badgesPage = badgesPage.replace(person_line_2 + "_font", font_size)
             badgesPage = badgesPage.replace("person_{}_line_2".format(position + 1), last_name)
             badgesPage = badgesPage.replace("person_{}_line_3".format(position + 1), job_title)
             badgesPage = badgesPage.replace("person_{}_line_4".format(position + 1), company)
